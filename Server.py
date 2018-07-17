@@ -1,5 +1,4 @@
 
-from os import urandom
 from hashlib import sha512
 import bcrypt
 
