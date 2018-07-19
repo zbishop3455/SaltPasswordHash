@@ -24,6 +24,7 @@ def menu():
     menu_choice = input("Enter your choice: ")
 
     if menu_choice is "1":
+        # add new user
         username = input("Enter new username: ")
         password = input("Enter new password: ")
         salt_size = randrange(15,25)
@@ -34,7 +35,7 @@ def menu():
         hash_alg.update(salt + hashed_password)
         salted_password = hash_alg.digest()
 
-        s.add_user(username, salt, salted_password)
+        server.add_user(username, salt, salted_password)
 
         print("Added user: " + username)
         print("User Salt: " + str(salt))
@@ -42,13 +43,27 @@ def menu():
         print("User Salted Password: " + str(salted_password))
 
     if menu_choice is "2":
+        # Validate user
         username = input("Enter username: ")
         password = input("Enter password: ")
+
+        user_salt = server.get_user_salt(username)
+        password = user_salt + password
+
+        hash_alg = sha256()
+        hash_alg.update(password)
+        salty_input = hash_alg.digest()
+
+        if server.authenticate(username, salty_input):
+            print("Success, welcome " + str(username) + "!")
+        else:
+            print("Invalid credentials")
+
 
     if menu_choice is "3":
         keep_going = False
 
 if __name__ == '__main__':
 
-    s = Server()
+    server = Server()
     menu()

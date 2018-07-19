@@ -4,6 +4,7 @@ import bcrypt
 
 class Server:
     def __init__(self):
+        Server.__init__()
         # Database format: db[username] = ( salt, hashed )
         self.user_authentication_database = {}
         self.hash_alg = sha512()
